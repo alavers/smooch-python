@@ -1,2 +1,7 @@
+/.eggs
+/build
+/dist
+/smooch.egg-info
+.DS_Store
 *.pyc
 *.sublime-workspace
