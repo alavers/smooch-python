@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+from smooch.resource import AppUser, Device
 
 SERVICE_URL = 'https://api.smooch.io'
 app_token = os.environ['SMOOCH_APP_TOKEN']
@@ -14,8 +15,8 @@ class Smooch(object):
     def init(self, device, userId=None):
         payload = {
             'device': {
-                'id': '7e6eedd677eb3ede0c636fc4c5b51a14',
-                'platform': 'other'
+                'id': device.id,
+                'platform': device.platform
             }
         }
         if (userId):
@@ -26,4 +27,4 @@ class Smooch(object):
 
         res = requests.post(self.service_url + '/v1/init',
                             data=json.dumps(payload), headers=headers)
-        return res
+        return AppUser(res.json()['appUser'])
