@@ -1,4 +1,5 @@
 import unittest2
+from mock import patch, Mock
 from smooch import Smooch
 from smooch.resource import AppUser, Device
 

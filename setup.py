@@ -35,5 +35,5 @@ setup(
     packages=['smooch', 'smooch.test'],
     install_requires=['requests >= 0.8.8'],
     test_suite='smooch.test.all',
-    tests_require=['unittest2']
+    tests_require=['unittest2', 'mock == 1.0.1']
 )
