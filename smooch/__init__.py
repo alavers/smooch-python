@@ -27,10 +27,7 @@ class Smooch(object):
 
     def init(self, device, userId=None):
         payload = {
-            'device': {
-                'id': device.id,
-                'platform': device.platform
-            }
+            'device': device.json()
         }
 
         if (userId):

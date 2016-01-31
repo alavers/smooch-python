@@ -2,19 +2,7 @@ import unittest2
 from mock import patch, MagicMock, call
 from smooch import Smooch
 from smooch.resource import AppUser, Device
-
-MOCK_INIT_RESPONSE = {
-    'appUser': {
-        '_id': 'apple',
-        'signedUpAt': 'banana2',
-        'conversationStarted': False,
-        'properties': {}
-    }
-}
-
-SAMPLE_DEVICE = Device('7e6eedd677eb3ede0c636fc4c5b51a14')
-SAMPLE_APP_TOKEN = 'b057ef47ed438757278ce66072f5194a'
-SAMPLE_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+from smooch.test.sample import INIT_RESPONSE, DEVICE, JWT, APP_TOKEN
 
 
 class InitTests(unittest2.TestCase):
@@ -25,7 +13,7 @@ class InitTests(unittest2.TestCase):
         self.mock_session = MagicMock()
 
         mock_response = MagicMock()
-        mock_response.json.return_value = MOCK_INIT_RESPONSE
+        mock_response.json.return_value = INIT_RESPONSE
         self.mock_session.post.return_value = mock_response
 
         self.session_patcher = patch('smooch.Session')
@@ -34,18 +22,18 @@ class InitTests(unittest2.TestCase):
         self.addCleanup(self.session_patcher.stop)
 
     def test_defaults(self):
-        res = Smooch(app_token=SAMPLE_APP_TOKEN).init(SAMPLE_DEVICE)
+        res = Smooch(app_token=APP_TOKEN).init(DEVICE)
         self.mock_session.post.assert_called_once()
 
     def test_app_token(self):
-        Smooch(app_token=SAMPLE_APP_TOKEN).init(SAMPLE_DEVICE)
+        Smooch(app_token=APP_TOKEN).init(DEVICE)
         self.mock_session.headers.update.assert_has_calls(
-            call({'app-token': SAMPLE_APP_TOKEN}))
+            call({'app-token': APP_TOKEN}))
 
     def test_jwt(self):
-        Smooch(jwt=SAMPLE_JWT).init(SAMPLE_DEVICE)
+        Smooch(jwt=JWT).init(DEVICE)
         self.mock_session.headers.update.assert_has_calls(
-            call({'authorization': 'Bearer ' + SAMPLE_JWT}))
+            call({'authorization': 'Bearer ' + JWT}))
 
 if __name__ == '__main__':
     unittest2.main()
