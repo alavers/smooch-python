@@ -2,32 +2,37 @@ import re
 import json
 from collections import MutableMapping
 
-snake_case = re.compile('_([a-z0-9])')
+snake_case = re.compile('(?<!^)_([a-z0-9])')
 
 
 class SmoochResource(MutableMapping):
 
     def __init__(self, *args, **kwargs):
-        kwargs = dict(
+        all_args = kwargs
+
+        if len(args) > 0 and type(args[0]) == dict:
+            all_args.update(args[0])
+
+        all_args = dict(
             map(lambda (k, v): (self._key_transform(k), v),
-                kwargs.iteritems()))
+                all_args.iteritems()))
 
         # validate optional and required args
         optional_attrs = self._optional_attrs()
         required_attrs = self._required_attrs()
         all_attrs = optional_attrs.union(required_attrs)
-        unknown_args = set(kwargs.keys()).difference(all_attrs)
+        unknown_args = set(all_args.keys()).difference(all_attrs)
         if unknown_args:
             raise ValueError("'%s' recieved invalid argument(s): '%s'" %
                              (type(self).__name__, ', '.join(unknown_args)))
 
-        missing_args = required_attrs.difference(set(kwargs.keys()))
+        missing_args = required_attrs.difference(set(all_args.keys()))
         if missing_args:
             raise ValueError("'%s' missing argument(s): '%s'" %
                              (type(self).__name__, ', '.join(missing_args)))
 
         self._store = dict()
-        self.update(dict(*args, **kwargs))
+        self.update(all_args)
 
     def __setattr__(self, key, value):
         if key[0] == '_' or key in self.__dict__:
@@ -83,7 +88,9 @@ class AppUser(SmoochResource):
 
     @classmethod
     def _optional_attrs(cls):
-        return {'givenName', 'surname', 'email', 'properties'}
+        return {
+            '_id', 'givenName', 'surname', 'email', 'signedUpAt',
+            'conversationStarted', 'properties'}
 
 
 class Device(SmoochResource):
