@@ -1,7 +1,6 @@
 import unittest2
 from mock import patch, MagicMock, call
 from smooch import Smooch
-from smooch.resource import AppUser, Device
 from smooch.test.sample import INIT_RESPONSE, DEVICE, JWT, APP_TOKEN
 
 
@@ -22,7 +21,7 @@ class InitTests(unittest2.TestCase):
         self.addCleanup(self.session_patcher.stop)
 
     def test_defaults(self):
-        res = Smooch(app_token=APP_TOKEN).init(DEVICE)
+        Smooch(app_token=APP_TOKEN).init(DEVICE)
         self.mock_session.post.assert_called_once()
 
     def test_app_token(self):

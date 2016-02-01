@@ -1,7 +1,6 @@
 import json
-import requests
 from requests import Session
-from smooch.resource import AppUser, Device
+from smooch.resource import AppUser
 
 SERVICE_URL = 'https://api.smooch.io'
 

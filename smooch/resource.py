@@ -42,11 +42,11 @@ class SmoochResource(MutableMapping):
 
     def __getattr__(self, key):
         if key[0] == '_':
-            raise AttributeError(k)
+            raise AttributeError(key)
 
         try:
             return self._store[self._key_transform(key)]
-        except KeyError as e:
+        except KeyError:
             raise AttributeError("'%s' object has no attribute '%s'" %
                                  (type(self).__name__, key))
 
