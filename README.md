@@ -1,1 +1,1 @@
-# Smooch Python
+# Smooch Python[![Build Status](https://travis-ci.org/alavers/smooch-python.svg?branch=master)](https://travis-ci.org/alavers/smooch-python)
