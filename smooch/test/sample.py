@@ -1,4 +1,4 @@
-from smooch import Device
+from smooch.resource import Device
 
 INIT_RESPONSE = {
     'appUser': {
