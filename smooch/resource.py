@@ -14,8 +14,8 @@ class SmoochResource(MutableMapping):
             all_args.update(args[0])
 
         all_args = dict(
-            map(lambda (k, v): (self._key_transform(k), v),
-                all_args.iteritems()))
+            map(lambda kv: (self._key_transform(kv[0]), kv[1]),
+                all_args.items()))
 
         # validate optional and required args
         optional_attrs = self._optional_attrs()
@@ -88,9 +88,8 @@ class AppUser(SmoochResource):
 
     @classmethod
     def _optional_attrs(cls):
-        return {
-            '_id', 'givenName', 'surname', 'email', 'signedUpAt',
-            'conversationStarted', 'properties'}
+        return set(['_id', 'givenName', 'surname', 'email', 'signedUpAt',
+                    'conversationStarted', 'properties'])
 
 
 class Device(SmoochResource):
@@ -102,8 +101,8 @@ class Device(SmoochResource):
 
     @classmethod
     def _required_attrs(cls):
-        return {'id'}
+        return set(['id'])
 
     @classmethod
     def _optional_attrs(cls):
-        return {'platform'}
+        return set(['platform'])

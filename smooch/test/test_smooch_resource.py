@@ -6,11 +6,11 @@ class Foo(SmoochResource):
 
     @classmethod
     def _required_attrs(cls):
-        return {'fooBar'}
+        return set(['fooBar'])
 
     @classmethod
     def _optional_attrs(cls):
-        return {'baz', 'qux'}
+        return set(['baz', 'qux'])
 
 
 class SmoochResourceTests(TestCase):
@@ -21,8 +21,8 @@ class SmoochResourceTests(TestCase):
 
     def test_optional_attrs(self):
         foo = Foo(foo_bar='Steve', qux='Brule')
-        self.assertEquals(foo.foo_bar, 'Steve')
-        self.assertEquals(foo.qux, 'Brule')
+        self.assertEqual(foo.foo_bar, 'Steve')
+        self.assertEqual(foo.qux, 'Brule')
         self.assertNotIn('baz', foo.keys())
 
     def test_camel_case(self):
