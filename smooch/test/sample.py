@@ -11,7 +11,7 @@ INIT_RESPONSE = {
     }
 }
 
-DEVICE = Device(id='7e6eedd677eb3ede0c636fc4c5b51a14')
+DEVICE = Device(id='7e6eedd677eb3ede0c636fc4c5b51a14', platform='other')
 
 APP_TOKEN = 'b057ef47ed438757278ce66072f5194a'
 

@@ -1,13 +1,16 @@
 import re
 import json
 from collections import MutableMapping
+from smooch.error import SmoochError
 
 snake_case = re.compile('(?<!^)_([a-z0-9])')
 
 
 class SmoochResource(MutableMapping):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, api=None, *args, **kwargs):
+        self._api = api
+
         all_args = kwargs
 
         if len(args) > 0 and type(args[0]) == dict:
@@ -83,13 +86,25 @@ class SmoochResource(MutableMapping):
     def json(self):
         return json.dumps(self._store)
 
+    def dict(self):
+        return self._store
+
 
 class AppUser(SmoochResource):
 
     @classmethod
     def _optional_attrs(cls):
         return set(['_id', 'givenName', 'surname', 'email', 'signedUpAt',
-                    'conversationStarted', 'properties'])
+                    'conversationStarted', 'properties', 'credentialRequired'])
+
+    def get_conversation(self):
+        path = '/appusers/%s/conversation' % (self._store['_id'])
+        res = self._api.get(path)
+
+        if (res.status_code != 200):
+            raise SmoochError('Get conversation failed', res)
+
+        return Conversation(api=self._api, **res.json()['conversation'])
 
 
 class Device(SmoochResource):
@@ -106,3 +121,21 @@ class Device(SmoochResource):
     @classmethod
     def _optional_attrs(cls):
         return set(['platform'])
+
+
+class Conversation(SmoochResource):
+
+    @classmethod
+    def _required_attrs(cls):
+        return set(['_id', 'messages', 'appMakers', 'appUsers'])
+
+
+class Message(SmoochResource):
+
+    @classmethod
+    def _required_attrs(cls):
+        return set(['_id', 'text', 'authorId', 'role'])
+
+    @classmethod
+    def _optional_attrs(cls):
+        return set(['name', 'avatarUrl'])
