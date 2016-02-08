@@ -10,12 +10,12 @@ class InitTests(unittest2.TestCase):
         super(InitTests, self).setUp()
 
         self.mock_session = MagicMock()
-
         mock_response = MagicMock()
         mock_response.json.return_value = INIT_RESPONSE
+        mock_response.status_code = 200
         self.mock_session.post.return_value = mock_response
 
-        self.session_patcher = patch('smooch.Session')
+        self.session_patcher = patch('smooch.api.Session')
         mock_session_cls = self.session_patcher.start()
         mock_session_cls.return_value = self.mock_session
         self.addCleanup(self.session_patcher.stop)

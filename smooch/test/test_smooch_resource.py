@@ -36,7 +36,7 @@ class SmoochResourceTests(TestCase):
         self.assertEquals(foo.fooBar, 'Steve')
 
     def test_from_dict(self):
-        foo = Foo({'fooBar': 'Steve'})
+        foo = Foo(**{'fooBar': 'Steve'})
         self.assertEquals(foo.fooBar, 'Steve')
 
     def test_invalid_params(self):
@@ -51,7 +51,7 @@ class AppUserTests(TestCase):
         self.assertEquals(app_user.givenName, 'Steve')
 
     def test_from_dict(self):
-        app_user = AppUser({'givenName': 'Steve'})
+        app_user = AppUser(**{'givenName': 'Steve'})
         self.assertEquals(app_user.givenName, 'Steve')
 
 
@@ -62,7 +62,7 @@ class DeviceTests(TestCase):
         self.assertEquals(device.id, 'banana')
 
     def test_from_dict(self):
-        device = Device({'id': 'banana'})
+        device = Device(**{'id': 'banana'})
         self.assertEquals(device.id, 'banana')
 
 if __name__ == '__main__':
